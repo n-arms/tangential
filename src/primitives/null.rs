@@ -5,9 +5,10 @@ use crate::parser::Parser;
 
 use super::void::Void;
 
+#[derive(Clone)]
 pub struct Null<T>(pub T);
 
-impl<T: Eq + Clone + Hash + 'static> Parser for Null<T> {
+impl<T: Eq + Hash + Clone + 'static> Parser for Null<T> {
     type Output = T;
 
     fn parse_null(&self, forest: &mut Forest<Self::Output>) {
@@ -16,5 +17,9 @@ impl<T: Eq + Clone + Hash + 'static> Parser for Null<T> {
 
     fn derivative(&self, _: char) -> Box<dyn Parser<Output = Self::Output>> {
         Box::<Void<T>>::default()
+    }
+
+    fn clone_box(&self) -> Box<dyn Parser<Output = Self::Output>> {
+        Box::new(self.clone())
     }
 }

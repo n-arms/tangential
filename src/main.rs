@@ -42,6 +42,18 @@ mod forest;
 mod parser;
 mod primitives;
 
+use combinators::choice::Choice;
+use parser::parse_str;
+use primitives::char::Char;
+
+use crate::combinators::then::Then;
+
+#[allow(clippy::print_stdout, clippy::use_debug)]
 fn main() {
-    println!("Hello, world!");
+    let parser: Choice<_> = Choice::new(vec![
+        Box::new(Then::new(Char('('), Char(')'))),
+        Box::new(Then::new(Char('a'), Char('b'))),
+    ]);
+
+    println!("{:?}", parse_str(&parser, "ab"));
 }

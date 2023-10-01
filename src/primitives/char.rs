@@ -3,7 +3,8 @@ use super::void::Void;
 use crate::forest::Forest;
 use crate::parser::Parser;
 
-pub struct Char(char);
+#[derive(Copy, Clone)]
+pub struct Char(pub char);
 
 impl Parser for Char {
     type Output = char;
@@ -18,5 +19,9 @@ impl Parser for Char {
         } else {
             Box::<Void<char>>::default()
         }
+    }
+
+    fn clone_box(&self) -> Box<dyn Parser<Output = Self::Output>> {
+        Box::new(*self)
     }
 }
